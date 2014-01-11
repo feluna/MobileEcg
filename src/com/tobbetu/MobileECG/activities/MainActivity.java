@@ -3,14 +3,11 @@ package com.tobbetu.MobileECG.activities;
 import android.app.Activity;
 import android.os.Bundle;
 
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.shimmerresearch.driver.*;
 import com.shimmerresearch.android.*;
@@ -23,7 +20,6 @@ import com.tobbetu.MobileECG.R;
  * Time: 17:00
  */
 public class MainActivity extends Activity {
-    Timer mTimer;
     private Shimmer mShimmerDevice = null;
 
     @Override
@@ -43,7 +39,7 @@ public class MainActivity extends Activity {
                 case Shimmer.MESSAGE_READ:
                     if ((msg.obj instanceof ObjectCluster)) {	// within each msg an object can be include, objectclusters are used to represent the data structure of the shimmer device
                         ObjectCluster objectCluster =  (ObjectCluster) msg.obj;
-                        if (objectCluster.mMyName == "Device") {
+                        if (objectCluster.mMyName.equals("Device")) {
 
                             Collection<FormatCluster> ecg_ra_ll = objectCluster.mPropertyCluster.get("ECG RA-LL");  // first retrieve all the possible formats for the current sensor device
                             if (ecg_ra_ll != null){
@@ -74,7 +70,6 @@ public class MainActivity extends Activity {
                                 mShimmerDevice.writeEnabledSensors(Shimmer.SENSOR_ECG);
                                 mShimmerDevice.writeSamplingRate(51.2);
                                 mShimmerDevice.startStreaming();
-                                //shimmerTimer(500000); //Disconnect in 30 seconds
                             }
                             break;
                         case Shimmer.STATE_CONNECTING:
@@ -89,20 +84,6 @@ public class MainActivity extends Activity {
             }
         }
     };
-
-    public synchronized void shimmerTimer(int seconds) {
-        mTimer = new Timer();
-        mTimer.schedule(new responseTask(), seconds*1000);
-    }
-
-    class responseTask extends TimerTask {
-        public void run() {
-            //mShimmerDevice.stopStreaming();
-            mShimmerDevice.writeEnabledSensors(Shimmer.SENSOR_ECG);
-            mShimmerDevice.startStreaming();
-            //shimmerTimer(5); //Disconnect in 30 seconds
-        }
-    }
 
     private void connectShimmer(String bluetoothAddress , String deviceName) {
 
