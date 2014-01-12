@@ -9,7 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 import java.util.Collection;
 
-import com.shimmerresearch.driver.*;
+import com.shimmerresearch.driver.FormatCluster;
+import com.shimmerresearch.driver.ObjectCluster;
 import com.shimmerresearch.android.*;
 import com.tobbetu.MobileECG.R;
 
