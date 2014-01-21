@@ -53,7 +53,6 @@ public class MainActivity extends Activity {
                                 FormatCluster formatCluster = ObjectCluster.returnFormatCluster(ecg_la_ll,"CAL"); // retrieve the calibrated data
                                 Log.d("CalibratedData","ECG LA-LL: " + formatCluster.mData + " " + formatCluster.mUnits);
                             }
-
                         }
                     }
                     break;
