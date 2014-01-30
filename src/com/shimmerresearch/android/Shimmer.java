@@ -2349,7 +2349,7 @@ public class Shimmer extends ShimmerBluetooth{
 	public void writeAccelRange(int range) {
 		mListofInstructions.add(new byte[]{SET_ACCEL_SENSITIVITY_COMMAND, (byte)range});
 		mAccelRange=(int)range;
-		if (mInitialized==true){ //if Shimmer if fully initialized (see initializeShimmer3()), setting the accel range 
+		if (mInitialized==true){ //if Shimmer if fully initialized (see initializeShimmer3()), setting the accel range
 			writeEnabledSensors(mEnabledSensors);
 		}
 	}

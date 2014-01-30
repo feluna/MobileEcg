@@ -8,8 +8,8 @@
             android:minSdkVersion="17"
             android:targetSdkVersion="17"/>
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
-    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
     <application
             android:icon="@drawable/icon"
@@ -27,5 +27,7 @@
         <activity
                 android:name=".activities.MainActivity"
                 android:screenOrientation="portrait"/>
+        <activity android:name=".activities.BaseActivty"/>
+        <activity android:name=".activities.ConnectionActivity"/>
     </application>
 </manifest>
