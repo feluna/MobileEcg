@@ -2,6 +2,7 @@ package com.tobbetu.MobileECG.service;
 
 import android.util.Log;
 import com.tobbetu.MobileECG.backend.Requests;
+import com.tobbetu.MobileECG.util.HttpURL;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -17,7 +18,6 @@ import java.io.IOException;
  */
 public class Login {
 
-    private final String url = "/user/login";
     private final String TAG = "Login";
     private final String loginInfo;
 
@@ -36,7 +36,7 @@ public class Login {
 
 
     public boolean makeRequest() throws IOException, JSONException {
-        HttpResponse loginResponse = Requests.post(this.url, loginInfo);
+        HttpResponse loginResponse = Requests.post(HttpURL.OP_LOGIN, loginInfo);
 
         if (Requests.checkStatusCode(loginResponse, HttpStatus.SC_OK)) {
             return true;
