@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import com.tobbetu.MobileECG.activities.ConnectionActivity;
+import android.widget.Toast;
 import com.tobbetu.MobileECG.activities.MainActivity;
-import com.tobbetu.MobileECG.models.User;
-import org.apache.http.HttpStatus;
+import com.tobbetu.MobileECG.service.Login;
+import org.json.JSONException;
+
+import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +17,7 @@ import org.apache.http.HttpStatus;
  * Date: 21.01.2014
  * Time: 22:24
  */
-public class LoginTask extends AsyncTask<String,Void, User>{
+public class LoginTask extends AsyncTask<String,Void, Boolean>{
 
     Context context;
     ProgressDialog progressDialog;
@@ -31,17 +33,28 @@ public class LoginTask extends AsyncTask<String,Void, User>{
     }
 
     @Override
-    protected User doInBackground(String... strings) {
-        // TODO will implement after Request class
+    protected Boolean doInBackground(String... strings) {
 
-        return null;
+        Login newLogin = new Login(strings);
+
+        try {
+            return newLogin.makeRequest();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override
-    protected void onPostExecute(User user) {
+    protected void onPostExecute(Boolean result) {
         progressDialog.dismiss();
 
-        //change screen
-        context.startActivity(new Intent(context, MainActivity.class));
+        if (result)
+            context.startActivity(new Intent(context, MainActivity.class));
+        else
+            Toast.makeText(context, "Login FAILED", Toast.LENGTH_LONG).show();
     }
 }

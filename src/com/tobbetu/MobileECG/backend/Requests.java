@@ -27,7 +27,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class Requests {
 
-    public static final String domain = "http://server.umutozan.com";
+    public static final String domain = "http://server.umutozan.com:8080/MobileEcgServer";
     private static Requests instance = null;
     private HttpClient httpclient;
 

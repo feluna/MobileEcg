@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:icon="@drawable/icon"
@@ -29,5 +30,6 @@
                 android:screenOrientation="portrait"/>
         <activity android:name=".activities.BaseActivty"/>
         <activity android:name=".activities.ConnectionActivity"/>
+        <activity android:name=".activities.RegisterActivity"/>
     </application>
 </manifest>

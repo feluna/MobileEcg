@@ -55,17 +55,17 @@ public class LoginActivity extends BaseActivty implements View.OnClickListener {
 
         switch (view.getId()) {
             case R.id.bDoLogin:
-                String userName = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String userName = etUsername.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
 
-//                if (isEmpty(userName, password)) {
-//                    Toast.makeText(this, "please fill all areas", Toast.LENGTH_LONG).show();
-//                } else {
+                if (isEmpty(userName, password)) {
+                    Toast.makeText(this, "please fill all areas", Toast.LENGTH_LONG).show();
+                } else {
                     new LoginTask(LoginActivity.this).execute(userName, password);
-//                }
+                }
                 break;
             case R.id.tvRegister:
-                Toast.makeText(this, "register yapacagız", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, RegisterActivity.class));
                 break;
         }
     }
