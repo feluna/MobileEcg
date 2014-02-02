@@ -5,22 +5,24 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.Collection;
-
-import android.widget.ToggleButton;
+import com.shimmerresearch.android.Shimmer;
 import com.shimmerresearch.driver.FormatCluster;
 import com.shimmerresearch.driver.ObjectCluster;
-import com.shimmerresearch.android.*;
 import com.shimmerresearch.graph.GraphView;
 import com.tobbetu.MobileECG.R;
+import com.tobbetu.MobileECG.models.ECGData;
+import com.tobbetu.MobileECG.tasks.ECGDataTask;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,11 +48,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     Handler handler = null;
     Runnable runnable = null;
 
+    List<ECGData> ecgDatas = new ArrayList<ECGData>();
+
     private boolean isConnected = false;
     private boolean isStreaming = false;
 
     private static int mGraphSubSamplingCount = 0;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +128,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         String units = "u12";
                         String calibratedUnits = "";
 
+                        ECGData ecgData = new ECGData();
+                        ecgData.setDate(null);
+                        ecgData.setLatitude(0);
+                        ecgData.setLongitude(0);
+
                         if (objectCluster.mMyName.equals("Device")) {
 
                             Collection<FormatCluster> ecg_ra_ll = objectCluster.mPropertyCluster.get("ECG RA-LL");  // first retrieve all the possible formats for the current sensor device
@@ -138,6 +146,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                     //Obtain data for graph
                                     dataArray[0] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_ra_ll, "RAW")).mData;
+                                    ecgData.setRa_ll(formatCluster.mData);
                                 }
                             }
 
@@ -153,8 +162,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                     //Obtain data for graph
                                     dataArray[1] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_la_ll, "RAW")).mData;
+                                    ecgData.setLa_ll(formatCluster.mData);
                                 }
                             }
+
+                            ecgDatas.add(ecgData);
 
                             int maxNumberofSamplesPerSecond=50; //Change this to increase/decrease the number of samples which are graphed
                             int subSamplingCount=0;
@@ -166,6 +178,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 myGraphView.setDataWithAdjustment(dataArray,"Shimmer : " + deviceName,units);
 
                                 mGraphSubSamplingCount=0;
+
+
+                                if (ecgDatas.size() == 500) {
+                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
+
+                                    ecgDatas = new ArrayList<ECGData>();
+                                }
+
                             }
                         }
                     }
