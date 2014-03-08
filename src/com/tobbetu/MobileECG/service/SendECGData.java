@@ -36,6 +36,9 @@ public class SendECGData {
                 jsonObject.put("longitude", ecgData.getLongitude());
                 jsonObject.put("ra_ll", ecgData.getRa_ll());
                 jsonObject.put("la_ll", ecgData.getLa_ll());
+                jsonObject.put("label", ecgData.getLabel());
+                jsonObject.put("raw_ra_ll", ecgData.getRAW_ra_ll());
+                jsonObject.put("raw_la_ll", ecgData.getRAW_la_ll());
 
                 jsonArray.put(jsonObject);
             } catch (JSONException e) {

@@ -4,10 +4,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <RelativeLayout
+            android:id="@+id/rlDeviceStatus"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+        <TextView
+                android:id="@+id/tvConnectionStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:text="Not Connected"/>
+
+
+        <Spinner
+                android:id="@+id/spinnerActivityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true">
+
+        </Spinner>
+
+    </RelativeLayout>
+
     <com.shimmerresearch.graph.GraphView
             android:id="@+id/graphView"
             android:layout_width="match_parent"
             android:layout_above="@+id/llButtons"
+            android:layout_below="@+id/rlDeviceStatus"
             android:layout_height="match_parent"/>
 
     <LinearLayout

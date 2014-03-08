@@ -15,6 +15,9 @@ public class ECGData {
     private double longitude;
     private double ra_ll;
     private double la_ll;
+    private int RAW_ra_ll;
+    private int RAW_la_ll;
+    private String label;
 
 
     public Date getDate() {
@@ -55,5 +58,29 @@ public class ECGData {
 
     public void setLa_ll(double la_ll) {
         this.la_ll = la_ll;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public int getRAW_ra_ll() {
+        return RAW_ra_ll;
+    }
+
+    public void setRAW_ra_ll(int RAW_ra_ll) {
+        this.RAW_ra_ll = RAW_ra_ll;
+    }
+
+    public int getRAW_la_ll() {
+        return RAW_la_ll;
+    }
+
+    public void setRAW_la_ll(int RAW_la_ll) {
+        this.RAW_la_ll = RAW_la_ll;
     }
 }

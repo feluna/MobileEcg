@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.*;
 import com.shimmerresearch.android.Shimmer;
 import com.shimmerresearch.driver.FormatCluster;
 import com.shimmerresearch.driver.ObjectCluster;
@@ -41,6 +41,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String deviceName = "Device";
 
     Button bConnectToShimmer, bDisconnectFromShimmer, bStartStreamFromShimmer, bStopStreamFromShimmer;
+    TextView tvConnectionStatus;
+    Spinner spinnerActivityLabel;
     GraphView myGraphView = null;
 
     Message shimmerMessage = null;
@@ -59,6 +61,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getActionBar().hide();
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
@@ -79,6 +82,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void init() {
+
+        tvConnectionStatus = (TextView) findViewById(R.id.tvConnectionStatus);
+        spinnerActivityLabel = (Spinner) findViewById(R.id.spinnerActivityLabel);
+        List<String> listOfSpinnerActions = new ArrayList<String>();
+        listOfSpinnerActions.add("default");
+        listOfSpinnerActions.add("Resting");
+        listOfSpinnerActions.add("Running");
+        listOfSpinnerActions.add("Walking");
+        listOfSpinnerActions.add("Eating");
+        listOfSpinnerActions.add("Sleeping");
+        listOfSpinnerActions.add("Working");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, listOfSpinnerActions);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerActivityLabel.setAdapter(dataAdapter);
+
         bConnectToShimmer = (Button) findViewById(R.id.bConnectToShimmer);
         bConnectToShimmer.setOnClickListener(this);
 
@@ -153,7 +171,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                     //Obtain data for graph
                                     dataArray[0] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_ra_ll, "RAW")).mData;
+                                    ecgData.setRAW_ra_ll(dataArray[0]);
                                     ecgData.setRa_ll(formatCluster.mData);
+                                    ecgData.setLabel(String.valueOf(spinnerActivityLabel.getSelectedItem()));
                                 }
                             }
 
@@ -169,7 +189,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                     //Obtain data for graph
                                     dataArray[1] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_la_ll, "RAW")).mData;
+                                    ecgData.setRAW_ra_ll(dataArray[1]);
                                     ecgData.setLa_ll(formatCluster.mData);
+                                    ecgData.setLabel(String.valueOf(spinnerActivityLabel.getSelectedItem()));
                                 }
                             }
 
@@ -187,11 +209,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 mGraphSubSamplingCount = 0;
 
 
-                                if (ecgDatas.size() == 500) {
-                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
+                                if (ecgDatas.size() == 5000) {
+//                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
 
-                                    ecgDatas = new ArrayList<ECGData>();
+//                                    ecgDatas = new ArrayList<ECGData>();
+
+                                    stopStreaming();
+                                    Toast.makeText(MainActivity.this, "Bitti", Toast.LENGTH_LONG).show();
+
+                                } else {
+                                    tvConnectionStatus.setText("Connected" + "   " + ecgDatas.size());
                                 }
+
 
                             }
                         }
@@ -220,14 +249,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         case Shimmer.MSG_STATE_FULLY_INITIALIZED:
                             if (mShimmerDevice.getShimmerState() == Shimmer.STATE_CONNECTED) {
                                 Log.d("ConnectionStatus", "Successful");
+                                setTvConnectionStatus("Connected");
                                 configureDeviceForStreaming();
                             }
                             break;
                         case Shimmer.STATE_CONNECTING:
                             Log.d("ConnectionStatus", "Connecting");
+                            setTvConnectionStatus("Connecting");
                             break;
                         case Shimmer.STATE_NONE:
                             Log.d("ConnectionStatus", "No State");
+                            setTvConnectionStatus("Not Connected");
                             break;
                         case Shimmer.MESSAGE_STOP_STREAMING_COMPLETE:
                             Log.d("ConnectionStatus", "Stop Streaming Completed");
@@ -262,6 +294,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             runnable = null;
         }
 
+        isConnected = false;
         finish();
         onDestroy();
     }
@@ -270,19 +303,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bConnectToShimmer:
-                this.connectShimmer();
+                connect();
                 break;
             case R.id.bDisconnectFromShimmer:
-                this.mShimmerDevice.stop();
-                disableAndEnableButtons(bDisconnectFromShimmer, bConnectToShimmer);
+                disconnect();
                 break;
             case R.id.bStartStreamFromShimmer:
-                mShimmerDevice.startStreaming();
-                disableAndEnableButtons(bStartStreamFromShimmer, bStopStreamFromShimmer);
+                startStreaming();
                 break;
             case R.id.bStopStreamFromShimmer:
-                mShimmerDevice.stopStreaming();
-                disableAndEnableButtons(bStopStreamFromShimmer, bStartStreamFromShimmer);
+                stopStreaming();
                 break;
         }
     }
@@ -291,4 +321,40 @@ public class MainActivity extends Activity implements View.OnClickListener {
         disableButton.setVisibility(Button.GONE);
         enableButton.setVisibility(Button.VISIBLE);
     }
+
+    private void setTvConnectionStatus(String status) {
+        tvConnectionStatus.setText(status);
+    }
+
+
+    private void connect() {
+        this.connectShimmer();
+    }
+
+    private void disconnect() {
+        disableAndEnableButtons(bDisconnectFromShimmer, bConnectToShimmer);
+        try {
+            stopStreaming();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Disconnect", "ERROR on disconnect", e);
+        }
+    }
+
+    private void startStreaming() {
+        if (isConnected) {
+            mShimmerDevice.startStreaming();
+            disableAndEnableButtons(bStartStreamFromShimmer, bStopStreamFromShimmer);
+        } else {
+            Toast.makeText(this, "You have to connect shimmer device first", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void stopStreaming() {
+        mShimmerDevice.stopStreaming();
+        disableAndEnableButtons(bStopStreamFromShimmer, bStartStreamFromShimmer);
+    }
+
+
+
 }
