@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String bluetoothAddress = "00:06:66:46:BD:90";
     String deviceName = "Device";
 
-    Button bConnectionWithShimmer, bStreamFromShimmer;
+    Button bConnectToShimmer, bDisconnectFromShimmer, bStartStreamFromShimmer, bStopStreamFromShimmer;
     GraphView myGraphView = null;
 
     Message shimmerMessage = null;
@@ -54,6 +54,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean isStreaming = false;
 
     private static int mGraphSubSamplingCount = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,11 +79,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void init() {
-        bConnectionWithShimmer = (Button) findViewById(R.id.bConnectionWithShimmer);
-        bConnectionWithShimmer.setOnClickListener(this);
+        bConnectToShimmer = (Button) findViewById(R.id.bConnectToShimmer);
+        bConnectToShimmer.setOnClickListener(this);
 
-        bStreamFromShimmer = (Button) findViewById(R.id.bStreamFromShimmer);
-        bStreamFromShimmer.setOnClickListener(this);
+        bDisconnectFromShimmer = (Button) findViewById(R.id.bDisconnectFromShimmer);
+        bDisconnectFromShimmer.setOnClickListener(this);
+
+        bStartStreamFromShimmer = (Button) findViewById(R.id.bStartStreamFromShimmer);
+        bStartStreamFromShimmer.setOnClickListener(this);
+
+        bStopStreamFromShimmer = (Button) findViewById(R.id.bStopStreamFromShimmer);
+        bStopStreamFromShimmer.setOnClickListener(this);
 
         myGraphView = (GraphView) findViewById(R.id.graphView);
 
@@ -168,16 +175,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                             ecgDatas.add(ecgData);
 
-                            int maxNumberofSamplesPerSecond=50; //Change this to increase/decrease the number of samples which are graphed
-                            int subSamplingCount=0;
-                            if (mShimmerDevice.getSamplingRate()>maxNumberofSamplesPerSecond){
-                                subSamplingCount=(int) (mShimmerDevice.getSamplingRate()/maxNumberofSamplesPerSecond);
+                            int maxNumberofSamplesPerSecond = 50; //Change this to increase/decrease the number of samples which are graphed
+                            int subSamplingCount = 0;
+                            if (mShimmerDevice.getSamplingRate() > maxNumberofSamplesPerSecond) {
+                                subSamplingCount = (int) (mShimmerDevice.getSamplingRate() / maxNumberofSamplesPerSecond);
                                 mGraphSubSamplingCount++;
                             }
-                            if (mGraphSubSamplingCount==subSamplingCount){
-                                myGraphView.setDataWithAdjustment(dataArray,"Shimmer : " + deviceName,units);
+                            if (mGraphSubSamplingCount == subSamplingCount) {
+                                myGraphView.setDataWithAdjustment(dataArray, "Shimmer : " + deviceName, units);
 
-                                mGraphSubSamplingCount=0;
+                                mGraphSubSamplingCount = 0;
 
 
                                 if (ecgDatas.size() == 500) {
@@ -192,8 +199,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     break;
                 case Shimmer.MESSAGE_TOAST:
                     Log.d("toast", msg.getData().getString(Shimmer.TOAST));
-                    Toast.makeText(getApplicationContext(), msg.getData().getString(Shimmer.TOAST),
-                            Toast.LENGTH_SHORT).show();
+
+                    //connection is failed, retry connection
+                    if (msg.getData().getString(Shimmer.TOAST).equals(getResources().getString(R.string.unable_to_connect_device))) {
+
+                        Toast.makeText(getApplicationContext(), msg.getData().getString(Shimmer.TOAST) + " Retrying to connect",
+                                Toast.LENGTH_SHORT).show();
+
+                        MainActivity.this.connectShimmer();
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg.getData().getString(Shimmer.TOAST),
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+
                     break;
 
                 case Shimmer.MESSAGE_STATE_CHANGE:
@@ -226,7 +245,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void configureDeviceForStreaming() {
         isConnected = true;
-        bConnectionWithShimmer.setText("Disconnect");
+        disableAndEnableButtons(bConnectToShimmer, bDisconnectFromShimmer);
 
         mShimmerDevice.writeEnabledSensors(Shimmer.SENSOR_ECG);
         mShimmerDevice.writeSamplingRate(51.2);
@@ -250,24 +269,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bConnectionWithShimmer:
-                if (!isConnected) {
-                    this.connectShimmer();
-                } else {
-                    this.mShimmerDevice.stop();
-                    isConnected = false;
-                }
+            case R.id.bConnectToShimmer:
+                this.connectShimmer();
                 break;
-            case R.id.bStreamFromShimmer:
-                if (!isStreaming) {
-                    mShimmerDevice.startStreaming();
-                    isStreaming = true;
-                    bStreamFromShimmer.setText("Stop Streaming");
-                } else {
-                    mShimmerDevice.stopStreaming();
-                    isStreaming = false;
-                }
+            case R.id.bDisconnectFromShimmer:
+                this.mShimmerDevice.stop();
+                disableAndEnableButtons(bDisconnectFromShimmer, bConnectToShimmer);
+                break;
+            case R.id.bStartStreamFromShimmer:
+                mShimmerDevice.startStreaming();
+                disableAndEnableButtons(bStartStreamFromShimmer, bStopStreamFromShimmer);
+                break;
+            case R.id.bStopStreamFromShimmer:
+                mShimmerDevice.stopStreaming();
+                disableAndEnableButtons(bStopStreamFromShimmer, bStartStreamFromShimmer);
                 break;
         }
+    }
+
+    private void disableAndEnableButtons(Button disableButton, Button enableButton) {
+        disableButton.setVisibility(Button.GONE);
+        enableButton.setVisibility(Button.VISIBLE);
     }
 }

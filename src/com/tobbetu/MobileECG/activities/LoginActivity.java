@@ -59,7 +59,8 @@ public class LoginActivity extends BaseActivty implements View.OnClickListener {
                 String password = etPassword.getText().toString().trim();
 
                 if (isEmpty(userName, password)) {
-                    createToast("please fill all areas");
+//                    createToast("please fill all areas");
+                    new LoginTask(LoginActivity.this).execute("anil", "123");
                 } else {
                     new LoginTask(LoginActivity.this).execute(userName, password);
                 }

@@ -15,17 +15,35 @@
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
         <Button
-                android:id="@+id/bConnectionWithShimmer"
+                android:id="@+id/bConnectToShimmer"
                 android:layout_width="0dp"
                 android:text="Connect"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
+
         <Button
-                android:id="@+id/bStreamFromShimmer"
+                android:id="@+id/bDisconnectFromShimmer"
+                android:layout_width="0dp"
+                android:text="Disconnect"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_weight="1"/>
+
+        <Button
+                android:id="@+id/bStartStreamFromShimmer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Start Stream"
+                android:layout_weight="1"/>
+
+        <Button
+                android:id="@+id/bStopStreamFromShimmer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Stop Stream"
+                android:visibility="gone"
                 android:layout_weight="1"/>
     </LinearLayout>
 
