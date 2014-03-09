@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,9 +18,10 @@ import com.tobbetu.MobileECG.R;
 import com.tobbetu.MobileECG.models.ECGData;
 import com.tobbetu.MobileECG.tasks.ECGDataTask;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -154,7 +154,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         String calibratedUnits = "";
 
                         ECGData ecgData = new ECGData();
-                        ecgData.setDate(null);
                         ecgData.setLatitude(0);
                         ecgData.setLongitude(0);
 
@@ -189,11 +188,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                     //Obtain data for graph
                                     dataArray[1] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_la_ll, "RAW")).mData;
-                                    ecgData.setRAW_ra_ll(dataArray[1]);
+                                    ecgData.setRAW_la_ll(dataArray[1]);
                                     ecgData.setLa_ll(formatCluster.mData);
                                     ecgData.setLabel(String.valueOf(spinnerActivityLabel.getSelectedItem()));
                                 }
                             }
+
+                            // ecg data timestamp
+                            byte[] timeAsByteArray = objectCluster.mSystemTimeStamp;
+                            ByteBuffer buffer = ByteBuffer.allocate(8);
+                            buffer.put(timeAsByteArray);
+                            buffer.flip();
+                            ecgData.setDate(new Date(buffer.getLong()));
+
+
 
                             ecgDatas.add(ecgData);
 
@@ -209,16 +217,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 mGraphSubSamplingCount = 0;
 
 
-                                if (ecgDatas.size() == 5000) {
-//                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
-
-//                                    ecgDatas = new ArrayList<ECGData>();
-
-                                    stopStreaming();
-                                    Toast.makeText(MainActivity.this, "Bitti", Toast.LENGTH_LONG).show();
-
-                                } else {
-                                    tvConnectionStatus.setText("Connected" + "   " + ecgDatas.size());
+                                if (ecgDatas.size() == 3000) {
+                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
+                                    ecgDatas = new ArrayList<ECGData>();
                                 }
 
 
@@ -235,7 +236,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(getApplicationContext(), msg.getData().getString(Shimmer.TOAST) + " Retrying to connect",
                                 Toast.LENGTH_SHORT).show();
 
-                        MainActivity.this.connectShimmer();
+//                        MainActivity.this.connectShimmer();
                     } else {
                         Toast.makeText(getApplicationContext(), msg.getData().getString(Shimmer.TOAST),
                                 Toast.LENGTH_SHORT).show();
@@ -355,6 +356,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         disableAndEnableButtons(bStopStreamFromShimmer, bStartStreamFromShimmer);
     }
 
-
+    private void paintGraph(List<ECGData> datas) {
+        for (ECGData data: datas) {
+            int[] rawDatas = {data.getRAW_ra_ll(), data.getRAW_la_ll()};
+            myGraphView.setDataWithAdjustment(rawDatas, "Shimmer : " + deviceName, "u12");
+        }
+    }
 
 }
