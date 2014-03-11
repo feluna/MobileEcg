@@ -31,12 +31,12 @@ public class SendECGData {
         for (ECGData ecgData: ecgDatas) {
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("date", null);
+                jsonObject.put("date", ecgData.getDate());
                 jsonObject.put("latitude", ecgData.getLatitude());
                 jsonObject.put("longitude", ecgData.getLongitude());
                 jsonObject.put("ra_ll", ecgData.getRa_ll());
                 jsonObject.put("la_ll", ecgData.getLa_ll());
-                jsonObject.put("label", ecgData.getLabel());
+                jsonObject.put("label", ecgData.getUserState());
                 jsonObject.put("raw_ra_ll", ecgData.getRAW_ra_ll());
                 jsonObject.put("raw_la_ll", ecgData.getRAW_la_ll());
 

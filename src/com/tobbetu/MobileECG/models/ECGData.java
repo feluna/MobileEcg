@@ -17,7 +17,7 @@ public class ECGData {
     private double la_ll;
     private int RAW_ra_ll;
     private int RAW_la_ll;
-    private String label;
+    private int userState;
 
 
     public Date getDate() {
@@ -60,12 +60,12 @@ public class ECGData {
         this.la_ll = la_ll;
     }
 
-    public String getLabel() {
-        return label;
+    public int getUserState() {
+        return userState;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setUserState(int userState) {
+        this.userState = userState;
     }
 
     public int getRAW_ra_ll() {

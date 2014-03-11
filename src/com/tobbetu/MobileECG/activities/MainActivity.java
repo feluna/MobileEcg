@@ -88,11 +88,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         List<String> listOfSpinnerActions = new ArrayList<String>();
         listOfSpinnerActions.add("default");
         listOfSpinnerActions.add("Resting");
+        listOfSpinnerActions.add("Sleeping");
         listOfSpinnerActions.add("Running");
         listOfSpinnerActions.add("Walking");
         listOfSpinnerActions.add("Eating");
-        listOfSpinnerActions.add("Sleeping");
         listOfSpinnerActions.add("Working");
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, listOfSpinnerActions);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinnerActivityLabel.setAdapter(dataAdapter);
@@ -172,7 +173,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     dataArray[0] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_ra_ll, "RAW")).mData;
                                     ecgData.setRAW_ra_ll(dataArray[0]);
                                     ecgData.setRa_ll(formatCluster.mData);
-                                    ecgData.setLabel(String.valueOf(spinnerActivityLabel.getSelectedItem()));
+                                    ecgData.setUserState(spinnerActivityLabel.getSelectedItemPosition() - 1);
                                 }
                             }
 
@@ -190,7 +191,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     dataArray[1] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_la_ll, "RAW")).mData;
                                     ecgData.setRAW_la_ll(dataArray[1]);
                                     ecgData.setLa_ll(formatCluster.mData);
-                                    ecgData.setLabel(String.valueOf(spinnerActivityLabel.getSelectedItem()));
+                                    ecgData.setUserState(spinnerActivityLabel.getSelectedItemPosition() - 1);
                                 }
                             }
 
@@ -217,8 +218,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 mGraphSubSamplingCount = 0;
 
 
-                                if (ecgDatas.size() == 3000) {
-                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
+                                if (ecgDatas.size() == 500) {
+                                    //new ECGDataTask(MainActivity.this, ecgDatas).execute();
                                     ecgDatas = new ArrayList<ECGData>();
                                 }
 
