@@ -1,12 +1,10 @@
 package com.tobbetu.MobileECG.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import com.tobbetu.MobileECG.R;
 import com.tobbetu.MobileECG.tasks.RegisterTask;
 
@@ -16,7 +14,7 @@ import com.tobbetu.MobileECG.tasks.RegisterTask;
  * Date: 01.02.2014
  * Time: 15:50
  */
-public class RegisterActivity extends BaseActivty {
+public class RegisterActivity extends BaseActivity {
 
     private final String TAG = "RegisterActivity";
     EditText etName, etSurname, etBirthday, etUsername, etPassword, etEtPasswordAgain, etPhoneNumber, etAddress;

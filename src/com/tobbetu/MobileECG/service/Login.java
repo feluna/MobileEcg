@@ -27,6 +27,7 @@ public class Login {
         try {
             login.put("username", params[0]);
             login.put("password", params[1]);
+            login.put("deviceID", params[2]);
         } catch ( JSONException e) {
             Log.e(TAG, "JSONException", e);
         }

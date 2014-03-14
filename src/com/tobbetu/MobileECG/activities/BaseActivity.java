@@ -11,7 +11,7 @@ import android.widget.Toast;
  * Date: 21.01.2014
  * Time: 22:44
  */
-public class BaseActivty extends Activity {
+public class BaseActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -41,6 +41,6 @@ public class BaseActivty extends Activity {
     }
 
     protected void createToast(String message) {
-        Toast.makeText(BaseActivty.this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(BaseActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }

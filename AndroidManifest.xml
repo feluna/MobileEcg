@@ -5,12 +5,21 @@
           android:versionName="1.0">
 
     <uses-sdk
-            android:minSdkVersion="14"
+            android:minSdkVersion="16"
             android:targetSdkVersion="17"/>
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+
+    <permission
+            android:name="com.tobbetu.MobileECG.permission.C2D_MESSAGE"
+            android:protectionLevel="signature"/>
+    <uses-permission android:name="com.tobbetu.MobileECG.permission.C2D_MESSAGE"/>
 
     <application
             android:icon="@drawable/icon"
@@ -29,7 +38,7 @@
         <activity
                 android:name=".activities.MainActivity"
                 android:screenOrientation="portrait"/>
-        <activity android:name=".activities.BaseActivty"/>
+        <activity android:name=".activities.BaseActivity"/>
         <activity android:name=".activities.ConnectionActivity"/>
         <activity
                 android:name=".activities.RegisterActivity"
@@ -37,5 +46,19 @@
         <activity
                 android:name=".activities.LoginActivity"
                 android:screenOrientation="portrait"/>
+
+        <receiver
+                android:name="activities.receiver.GcmBroadcastReceiver"
+                android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="com.example.asdas"/>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
+
     </application>
 </manifest>
