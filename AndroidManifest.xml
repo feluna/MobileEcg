@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -48,11 +49,11 @@
                 android:screenOrientation="portrait"/>
 
         <receiver
-                android:name="activities.receiver.GcmBroadcastReceiver"
+                android:name=".receiver.GcmBroadcastReceiver"
                 android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <category android:name="com.example.asdas"/>
+                <category android:name="com.tobbetu.MobileECG"/>
             </intent-filter>
         </receiver>
 

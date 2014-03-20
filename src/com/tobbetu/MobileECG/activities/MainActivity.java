@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -18,6 +19,10 @@ import com.tobbetu.MobileECG.R;
 import com.tobbetu.MobileECG.models.ECGData;
 import com.tobbetu.MobileECG.tasks.ECGDataTask;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -217,12 +222,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                 mGraphSubSamplingCount = 0;
 
-
-                                if (ecgDatas.size() == 500) {
+/*
+                                if (ecgDatas.size() == 800) {
+                                    writeToFile("a.txt", ecgDatas);
                                     //new ECGDataTask(MainActivity.this, ecgDatas).execute();
-                                    ecgDatas = new ArrayList<ECGData>();
+                                    //ecgDatas = new ArrayList<ECGData>();
+                                    stopStreaming();
+                                    Toast.makeText(MainActivity.this, "Bitti", Toast.LENGTH_LONG).show();
                                 }
-
+*/
 
                             }
                         }
@@ -361,6 +369,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for (ECGData data: datas) {
             int[] rawDatas = {data.getRAW_ra_ll(), data.getRAW_la_ll()};
             myGraphView.setDataWithAdjustment(rawDatas, "Shimmer : " + deviceName, "u12");
+        }
+    }
+
+    private void writeToFile(String filename, List<ECGData> list) {
+        File root = Environment.getExternalStorageDirectory();
+        File file = new File(root, filename);
+        if (list.size() > 0) {
+            try {
+                if (root.canWrite()) {
+                    FileWriter filewriter = new FileWriter(file);
+                    BufferedWriter out = new BufferedWriter(filewriter);
+                    for (int i = 0; i < list.size(); i++) {
+                        out.write(list.get(i).getRAW_ra_ll() + " " + list.get(i).getRAW_la_ll() + "\n");
+                    }
+                    out.close();
+                }
+                Log.i("TAG", "Done");
+                Log.i("TAG", "path :" + file.getAbsoluteFile());
+            } catch (IOException e) {
+                Log.e("TAG", "Could not write file " + e.getMessage());
+            }
         }
     }
 

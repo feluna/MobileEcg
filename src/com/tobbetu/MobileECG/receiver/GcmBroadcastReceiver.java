@@ -1,4 +1,4 @@
-package com.tobbetu.MobileECG.activities.receiver;
+package com.tobbetu.MobileECG.receiver;
 
 import android.app.Notification;
 import android.app.NotificationManager;

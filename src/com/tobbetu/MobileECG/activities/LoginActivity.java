@@ -93,12 +93,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 String password = etPassword.getText().toString().trim();
                 String regID = regid;
 
+                /*
                 if (isEmpty(userName, password)) {
 //                    createToast("please fill all areas");
                     new LoginTask(LoginActivity.this).execute("anil", "123", regid);
                 } else {
                     new LoginTask(LoginActivity.this).execute(userName, password);
-                }
+                } */
+                new LoginTask(LoginActivity.this).execute("anil", "123", regid);
+
                 break;
             case R.id.tvRegister:
                 startActivity(new Intent(this, RegisterActivity.class));
