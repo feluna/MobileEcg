@@ -3,85 +3,87 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_height="wrap_content">
-
-        <EditText
-                android:id="@+id/etRegisterName"
+    <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_margin="5dp"
-                android:hint="Name"/>
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content">
 
-        <EditText
-                android:id="@+id/etRegisterSurname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_margin="5dp"
-                android:hint="Surname"/>
+            <EditText
+                    android:id="@+id/etRegisterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_margin="5dp"
+                    android:hint="Name"/>
 
-        <EditText
-                android:id="@+id/etRegisterBirthday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_margin="5dp"
-                android:hint="Birthday (Optional)"/>
+            <EditText
+                    android:id="@+id/etRegisterSurname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_margin="5dp"
+                    android:hint="Surname"/>
 
-        <EditText
-                android:id="@+id/etRegisterUsername"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_margin="5dp"
-                android:hint="Username"/>
+            <EditText
+                    android:id="@+id/etRegisterBirthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_margin="5dp"
+                    android:hint="Birthday (Optional)"/>
 
-        <EditText
-                android:id="@+id/etRegisterPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:inputType="textPassword"
-                android:layout_margin="5dp"
-                android:hint="Password"/>
+            <EditText
+                    android:id="@+id/etRegisterUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_margin="5dp"
+                    android:hint="Username"/>
 
-        <EditText
-                android:id="@+id/etRegisterPasswordAgain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:inputType="textPassword"
-                android:layout_margin="5dp"
-                android:hint="Retype password"/>
+            <EditText
+                    android:id="@+id/etRegisterPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textPassword"
+                    android:layout_margin="5dp"
+                    android:hint="Password"/>
 
-        <EditText
-                android:id="@+id/etRegisterPhoneNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_margin="5dp"
-                android:hint="Phone Number (Optional)"/>
+            <EditText
+                    android:id="@+id/etRegisterPasswordAgain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textPassword"
+                    android:layout_margin="5dp"
+                    android:hint="Retype password"/>
 
-        <EditText
-                android:id="@+id/etRegisterAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="3"
-                android:layout_margin="5dp"
-                android:hint="Address (Optional)"/>
+            <EditText
+                    android:id="@+id/etRegisterPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_margin="5dp"
+                    android:hint="Phone Number (Optional)"/>
 
-        <Button
-                android:id="@+id/bDoRegister"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Register"
-                android:layout_margin="5dp"/>
-    </LinearLayout>
+            <EditText
+                    android:id="@+id/etRegisterAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="3"
+                    android:layout_margin="5dp"
+                    android:hint="Address (Optional)"/>
+
+            <Button
+                    android:id="@+id/bDoRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Register"
+                    android:layout_margin="5dp"/>
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
