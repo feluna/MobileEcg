@@ -9,6 +9,6 @@ package com.tobbetu.MobileECG.util;
 public class HttpURL {
 
     public static final String OP_LOGIN = "/user/login";
-    public static final String OP_REGISTER = "/user/register";
+    public static final String OP_REGISTER = "/user/patientRegister";
     public static final String OP_SEND_ECG_DATA = "/ecgdata/raw";
 }

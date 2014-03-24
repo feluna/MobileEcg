@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:layout_above="@+id/llRegisterFooter"
+                  android:orientation="vertical">
+
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/etRegisterUsername"
+                  android:singleLine="true"
+                  android:layout_margin="10dp"
+                  android:hint="Kullanıcı Adınız"/>
+
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/etRegisterPassword"
+                  android:singleLine="true"
+                  android:layout_margin="10dp"
+                  android:inputType="textPassword"
+                  android:hint="Şifreniz"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:id="@+id/llRegisterFooter"
+                  android:layout_alignParentBottom="true">
+
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/bRegisterSecondFooterLeft"
+                android:text="Geri"/>
+
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/bRegisterSecondFooterRight"
+                android:text="İleri"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

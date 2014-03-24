@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:layout_above="@+id/llRegisterFooter"
+                  android:orientation="vertical">
+
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/etRegisterUserSex"
+                  android:singleLine="true"
+                  android:layout_margin="10dp"
+                  android:hint="Cinsiyetiniz (Kadın/Erkek)"/>
+
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/etRegisterUserHeight"
+                  android:singleLine="true"
+                  android:layout_margin="10dp"
+                  android:inputType="numberDecimal"
+                  android:hint="Boyunuz (cm)"/>
+
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/etRegisterUserWeight"
+                  android:singleLine="true"
+                  android:layout_margin="10dp"
+                  android:inputType="numberDecimal"
+                  android:hint="Kilonuz (kg)"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:id="@+id/llRegisterFooter"
+                  android:layout_alignParentBottom="true">
+
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/bRegisterThirdFooterLeft"
+                android:text="Geri"/>
+
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/bRegisterThirdFooterRight"
+                android:text="İleri"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 import com.tobbetu.MobileECG.activities.MainActivity;
 import com.tobbetu.MobileECG.activities.RegisterActivity;
+import com.tobbetu.MobileECG.models.User;
 import com.tobbetu.MobileECG.service.Register;
 import org.json.JSONException;
 
@@ -18,7 +19,7 @@ import java.io.IOException;
  * Date: 01.02.2014
  * Time: 16:50
  */
-public class RegisterTask extends AsyncTask<String, Void, Boolean>{
+public class RegisterTask extends AsyncTask<User, Void, Boolean>{
 
     Context context;
     ProgressDialog progressDialog;
@@ -34,9 +35,9 @@ public class RegisterTask extends AsyncTask<String, Void, Boolean>{
     }
 
     @Override
-    protected Boolean doInBackground(String... strings) {
+    protected Boolean doInBackground(User... users) {
 
-        Register newRegister = new Register(strings);
+        Register newRegister = new Register(users[0]);
 
         try {
             return newRegister.makeRequest();

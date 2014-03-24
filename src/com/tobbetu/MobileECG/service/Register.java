@@ -2,6 +2,7 @@ package com.tobbetu.MobileECG.service;
 
 import android.util.Log;
 import com.tobbetu.MobileECG.backend.Requests;
+import com.tobbetu.MobileECG.models.User;
 import com.tobbetu.MobileECG.util.HttpURL;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -22,20 +23,35 @@ public class Register {
     private final String TAG = "Register";
     private final String registerInfo;
 
-    public Register(String[] params) {
+    public Register(User user) {
 
         JSONObject register = new JSONObject();
 
         Date now = new Date();
 
         try {
-            register.put("name", params[0]);
-            register.put("surname", params[1]);
-            register.put("birthday", null);
-            register.put("username", params[3]);
-            register.put("password", params[4]);
-            register.put("phoneNumber", params[5]);
-            register.put("address", params[6]);
+            register.put("birthday", user.getBirthday());
+            register.put("name", user.getName());
+            register.put("surname", user.getSurname());
+            register.put("username", user.getUsername());
+            register.put("password", user.getPassword());
+            register.put("phoneNumber", user.getPhoneNumber());
+            register.put("address", user.getAddress());
+            register.put("deviceID", user.getDeviceID());
+
+            register.put("sex", user.getSex());
+            register.put("activityFrequency", user.getActivityFrequency());
+            register.put("weight", user.getWeight());
+            register.put("height", user.getHeight());
+            register.put("smokingFrequency", user.getSmokingFrequency());
+            register.put("alcoholUsageFrequency", user.getAlcoholUsageFrequency());
+
+            register.put("kolesterolLDL", user.getKolesterolLDL());
+            register.put("kolesterolHDL", user.getKolesterolHDL());
+            register.put("hasHypertension", user.isHasHypertension());
+            register.put("hasDiabetes", user.isHasDiabetes());
+
+            register.put("bmi", user.getBmi());
 
         } catch (JSONException e) {
             Log.e(TAG, "JSONException", e);

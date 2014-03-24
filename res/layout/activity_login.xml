@@ -19,6 +19,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:hint="@string/hint_username"
+                android:inputType="numberDecimal"
                 android:padding="5dp"/>
 
         <EditText

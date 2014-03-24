@@ -1,12 +1,11 @@
 package com.tobbetu.MobileECG.activities;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import com.tobbetu.MobileECG.R;
-import com.tobbetu.MobileECG.tasks.RegisterTask;
+import com.tobbetu.MobileECG.adapter.MyViewPagerAdapter;
+import com.tobbetu.MobileECG.models.User;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,65 +13,34 @@ import com.tobbetu.MobileECG.tasks.RegisterTask;
  * Date: 01.02.2014
  * Time: 15:50
  */
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends FragmentActivity {
 
-    private final String TAG = "RegisterActivity";
-    EditText etName, etSurname, etBirthday, etUsername, etPassword, etEtPasswordAgain, etPhoneNumber, etAddress;
-    Button bDoRegister;
+    final String TAG = "RegisterActivity";
+    static ViewPager viewPager;
+    MyViewPagerAdapter myViewPagerAdapter;
+
+    public static User user;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        initialize();
+        user = new User();
+        user.setDeviceID(getIntent().getStringExtra("regid"));
+
+        viewPager = (ViewPager) findViewById(R.id.vpRegisterPager);
+        myViewPagerAdapter = new com.tobbetu.MobileECG.adapter.MyViewPagerAdapter(getSupportFragmentManager(), RegisterActivity.this);
+
+        if (viewPager != null)
+            viewPager.setAdapter(myViewPagerAdapter);
+
     }
 
-    private void initialize() {
-
-        etName = (EditText) findViewById(R.id.etRegisterName);
-        etSurname = (EditText) findViewById(R.id.etRegisterSurname);
-        etBirthday = (EditText) findViewById(R.id.etRegisterBirthday);
-        etUsername = (EditText) findViewById(R.id.etRegisterUsername);
-        etPassword = (EditText) findViewById(R.id.etRegisterPassword);
-        etEtPasswordAgain = (EditText) findViewById(R.id.etRegisterPasswordAgain);
-        etPhoneNumber = (EditText) findViewById(R.id.etRegisterPhoneNumber);
-        etAddress = (EditText) findViewById(R.id.etRegisterAddress);
-        bDoRegister = (Button) findViewById(R.id.bDoRegister);
-        bDoRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkPasswordFields()) {
-                    if (!isNull(etName, etSurname, etBirthday, etUsername, etPhoneNumber, etAddress)) {
-                        if (!isEmpty(etName.getText().toString(), etSurname.getText().toString(), etUsername.getText().toString())) {
-                            new RegisterTask(RegisterActivity.this).execute(etName.getText().toString(),
-                                    etSurname.getText().toString(),
-                                    etBirthday.getText().toString(),
-                                    etUsername.getText().toString(),
-                                    etPassword.getText().toString(),
-                                    etPhoneNumber.getText().toString(),
-                                    etAddress.getText().toString());
-                        } else {
-                            createToast("Name, Surname, Username or Password fields can not be empty");
-                        }
-                    } else {
-                        Log.e(TAG, "NullPointerException");
-                    }
-                } else {
-                    createToast("Passwords does not match");
-                }
-            }
-        });
+    public static void goNextPage(int i) {
+        viewPager.setCurrentItem(i);
     }
 
-    private boolean checkPasswordFields() {
-
-        if (isNull(etPassword, etEtPasswordAgain))
-            return false;
-        else if (isEmpty(etPassword.getText().toString(), etEtPasswordAgain.getText().toString()))
-            return false;
-        else if (isEqual(etPassword.getText().toString(), etEtPasswordAgain.getText().toString()))
-            return true;
-        else
-            return false; //for unexpected situation
+    public static void goPreviousPage(int i) {
+        viewPager.setCurrentItem(i);
     }
 }
