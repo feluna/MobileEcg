@@ -31,7 +31,7 @@ public class SendECGData {
         for (ECGData ecgData: ecgDatas) {
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("date", ecgData.getDate());
+                jsonObject.put("date", ecgData.getDate().getTime());
                 jsonObject.put("latitude", ecgData.getLatitude());
                 jsonObject.put("longitude", ecgData.getLongitude());
                 jsonObject.put("ra_ll", ecgData.getRa_ll());
