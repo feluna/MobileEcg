@@ -11,6 +11,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import com.pubnub.api.Pubnub;
+import com.pubnub.api.PubnubError;
 import com.shimmerresearch.android.Shimmer;
 import com.shimmerresearch.driver.FormatCluster;
 import com.shimmerresearch.driver.ObjectCluster;
@@ -18,6 +20,9 @@ import com.shimmerresearch.graph.GraphView;
 import com.tobbetu.MobileECG.R;
 import com.tobbetu.MobileECG.models.ECGData;
 import com.tobbetu.MobileECG.tasks.ECGDataTask;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -62,13 +68,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static int mGraphSubSamplingCount = 0;
 
+    private Pubnub pubnub;
+    com.pubnub.api.Callback callback;
+    JSONArray jsonArray = new JSONArray();
+    EditText xx;
+    int sayi = 20;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getActionBar().hide();
 
+        pubnub = new Pubnub("pub-c-13b31cee-ef79-440f-b46d-e3804f3d5435", "sub-c-3a5a7350-b28d-11e3-b8c3-02ee2ddab7fe");
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        callback = new com.pubnub.api.Callback() {
+            public void successCallback(String channel, Object response) {
+                System.out.println(response.toString());
+            }
+
+            public void errorCallback(String channel, PubnubError error) {
+                System.out.println(error.toString());
+            }
+        };
     }
 
 
@@ -118,6 +142,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         myGraphView = (GraphView) findViewById(R.id.graphView);
 
         mShimmerDevice = new Shimmer(this, mHandler, deviceName, false);
+
+        xx = (EditText) findViewById(R.id.xx);
     }
 
     @Override
@@ -208,7 +234,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             ecgData.setDate(new Date(buffer.getLong()));
 
 
-
                             ecgDatas.add(ecgData);
 
                             int maxNumberofSamplesPerSecond = 50; //Change this to increase/decrease the number of samples which are graphed
@@ -222,16 +247,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                 mGraphSubSamplingCount = 0;
 
-/*
-                                if (ecgDatas.size() == 800) {
-                                    writeToFile("a.txt", ecgDatas);
-                                    //new ECGDataTask(MainActivity.this, ecgDatas).execute();
-                                    //ecgDatas = new ArrayList<ECGData>();
-                                    stopStreaming();
-                                    Toast.makeText(MainActivity.this, "Bitti", Toast.LENGTH_LONG).show();
-                                }
-*/
+                                //live stream
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("r", dataArray[0]);
+                                    jsonObject.put("l", dataArray[1]);
+                                    jsonArray.put(jsonObject);
 
+                                    if (jsonArray.length() == sayi) {
+                                        pubnub.publish("hello_world", jsonArray, callback);
+                                        jsonArray = new JSONArray();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                                //to the server
+                                if (ecgDatas.size() == 800) {
+                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
+                                    ecgDatas = new ArrayList<ECGData>();
+                                }
+
+
+                                ecgDatas = new ArrayList<ECGData>();
                             }
                         }
                     }
@@ -307,6 +346,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         isConnected = false;
         finish();
         onDestroy();
+
+        System.exit(0);
     }
 
     @Override
@@ -353,6 +394,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void startStreaming() {
         if (isConnected) {
+            sayi = Integer.parseInt(xx.getText().toString().trim());
             mShimmerDevice.startStreaming();
             disableAndEnableButtons(bStartStreamFromShimmer, bStopStreamFromShimmer);
         } else {
@@ -366,7 +408,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void paintGraph(List<ECGData> datas) {
-        for (ECGData data: datas) {
+        for (ECGData data : datas) {
             int[] rawDatas = {data.getRAW_ra_ll(), data.getRAW_la_ll()};
             myGraphView.setDataWithAdjustment(rawDatas, "Shimmer : " + deviceName, "u12");
         }

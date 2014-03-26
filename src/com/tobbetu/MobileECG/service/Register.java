@@ -30,7 +30,7 @@ public class Register {
         Date now = new Date();
 
         try {
-            register.put("birthday", user.getBirthday());
+            register.put("birthday", user.getBirthday().getTime());
             register.put("name", user.getName());
             register.put("surname", user.getSurname());
             register.put("username", user.getUsername());

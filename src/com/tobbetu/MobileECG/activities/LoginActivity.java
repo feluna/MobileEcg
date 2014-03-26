@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 } else {
                     new LoginTask(LoginActivity.this).execute(userName, password);
                 } */
-                new LoginTask(LoginActivity.this).execute("anil", "123", regid);
+                new LoginTask(LoginActivity.this).execute("patient", "pass", regid);
 
                 break;
             case R.id.tvRegister:
