@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -24,10 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,21 +59,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
     List<ECGData> ecgDatas = new ArrayList<ECGData>();
 
     private boolean isConnected = false;
-    private boolean isStreaming = false;
-
     private static int mGraphSubSamplingCount = 0;
 
     private Pubnub pubnub;
     com.pubnub.api.Callback callback;
     JSONArray jsonArray = new JSONArray();
-    EditText xx;
-    int sayi = 24;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getActionBar().hide();
+        context = this;
 
         pubnub = new Pubnub(getString(R.string.pubnup_publish_key), getString(R.string.pubnup_subscribe_key));
 
@@ -142,8 +134,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         myGraphView = (GraphView) findViewById(R.id.graphView);
 
         mShimmerDevice = new Shimmer(this, mHandler, deviceName, false);
-
-        xx = (EditText) findViewById(R.id.xx);
     }
 
     @Override
@@ -177,13 +167,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     if ((msg.obj instanceof ObjectCluster)) {    // within each msg an object can be include, objectclusters are used to represent the data structure of the shimmer device
                         ObjectCluster objectCluster = (ObjectCluster) msg.obj;
 
-                        String[] sensorName = new String[2];
                         int[] dataArray = new int[2];
-                        double[] calibratedDataArray = new double[2];
-                        sensorName[0] = "ECG RA-LL";
-                        sensorName[1] = "ECG LA-LL";
                         String units = "u12";
-                        String calibratedUnits = "";
 
                         ECGData ecgData = new ECGData();
                         ecgData.setLatitude(0);
@@ -196,12 +181,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 FormatCluster formatCluster = ObjectCluster.returnFormatCluster(ecg_ra_ll, "CAL"); // retrieve the calibrated data
                                 if (formatCluster != null) {
                                     Log.d("CalibratedData", "ECG RA-LL: " + formatCluster.mData + " " + formatCluster.mUnits);
-                                    //Obtain data for text view
-                                    calibratedDataArray[0] = formatCluster.mData;
-                                    calibratedUnits = formatCluster.mUnits;
 
                                     //Obtain data for graph
-                                    dataArray[0] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_ra_ll, "RAW")).mData;
+                                    dataArray[0] = (int) ObjectCluster.returnFormatCluster(ecg_ra_ll, "RAW").mData;
                                     ecgData.setRAW_ra_ll(dataArray[0]);
                                     ecgData.setRa_ll(formatCluster.mData);
                                     ecgData.setUserState(spinnerActivityLabel.getSelectedItemPosition() - 1);
@@ -214,12 +196,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 if (formatCluster != null) {
                                     Log.d("CalibratedData", "ECG LA-LL: " + formatCluster.mData + " " + formatCluster.mUnits);
 
-                                    //Obtain data for text view
-                                    calibratedDataArray[1] = formatCluster.mData;
-                                    calibratedUnits = formatCluster.mUnits;
-
                                     //Obtain data for graph
-                                    dataArray[1] = (int) ((FormatCluster) ObjectCluster.returnFormatCluster(ecg_la_ll, "RAW")).mData;
+                                    dataArray[1] = (int) ObjectCluster.returnFormatCluster(ecg_la_ll, "RAW").mData;
                                     ecgData.setRAW_la_ll(dataArray[1]);
                                     ecgData.setLa_ll(formatCluster.mData);
                                     ecgData.setUserState(spinnerActivityLabel.getSelectedItemPosition() - 1);
@@ -254,7 +232,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     jsonObject.put("l", dataArray[1]);
                                     jsonArray.put(jsonObject);
 
-                                    if (jsonArray.length() == sayi) {
+                                    if (jsonArray.length() == 24) {
                                         pubnub.publish("hello_world", jsonArray, callback);
                                         jsonArray = new JSONArray();
                                     }
@@ -265,7 +243,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                 //to the server
                                 if (ecgDatas.size() == 800) {
-                                    new ECGDataTask(MainActivity.this, ecgDatas).execute();
+                                    new ECGDataTask(context, ecgDatas).execute();
                                     ecgDatas = new ArrayList<ECGData>();
                                 }
 
@@ -280,12 +258,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     //connection is failed, retry connection
                     if (msg.getData().getString(Shimmer.TOAST).equals(getResources().getString(R.string.unable_to_connect_device))) {
 
-                        Toast.makeText(getApplicationContext(), msg.getData().getString(Shimmer.TOAST) + " Retrying to connect",
+                        Toast.makeText(context, msg.getData().getString(Shimmer.TOAST) + " Retrying to connect",
                                 Toast.LENGTH_SHORT).show();
 
 //                        MainActivity.this.connectShimmer();
                     } else {
-                        Toast.makeText(getApplicationContext(), msg.getData().getString(Shimmer.TOAST),
+                        Toast.makeText(context, msg.getData().getString(Shimmer.TOAST),
                                 Toast.LENGTH_SHORT).show();
                     }
 
@@ -393,7 +371,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void startStreaming() {
         if (isConnected) {
-            sayi = Integer.parseInt(xx.getText().toString().trim());
             mShimmerDevice.startStreaming();
             disableAndEnableButtons(bStartStreamFromShimmer, bStopStreamFromShimmer);
         } else {
@@ -405,33 +382,4 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mShimmerDevice.stopStreaming();
         disableAndEnableButtons(bStopStreamFromShimmer, bStartStreamFromShimmer);
     }
-
-    private void paintGraph(List<ECGData> datas) {
-        for (ECGData data : datas) {
-            int[] rawDatas = {data.getRAW_ra_ll(), data.getRAW_la_ll()};
-            myGraphView.setDataWithAdjustment(rawDatas, "Shimmer : " + deviceName, "u12");
-        }
-    }
-
-    private void writeToFile(String filename, List<ECGData> list) {
-        File root = Environment.getExternalStorageDirectory();
-        File file = new File(root, filename);
-        if (list.size() > 0) {
-            try {
-                if (root.canWrite()) {
-                    FileWriter filewriter = new FileWriter(file);
-                    BufferedWriter out = new BufferedWriter(filewriter);
-                    for (int i = 0; i < list.size(); i++) {
-                        out.write(list.get(i).getRAW_ra_ll() + " " + list.get(i).getRAW_la_ll() + "\n");
-                    }
-                    out.close();
-                }
-                Log.i("TAG", "Done");
-                Log.i("TAG", "path :" + file.getAbsoluteFile());
-            } catch (IOException e) {
-                Log.e("TAG", "Could not write file " + e.getMessage());
-            }
-        }
-    }
-
 }
