@@ -5,7 +5,6 @@
                 android:layout_height="match_parent">
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:layout_above="@+id/llRegisterFooter"
                   android:orientation="vertical">
 
         <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -25,12 +24,13 @@
                   android:singleLine="true"
                   android:layout_margin="10dp"
                   android:inputType="date"
+                  android:maxLength="10"
                   android:hint="Doğum Tarihiniz (01.01.1970)"/>
 
         <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:id="@+id/etRegisterAddress"
                   android:layout_margin="10dp"
-                  android:maxLines="2"
+                  android:singleLine="true"
                   android:hint="Adresiniz"/>
 
         <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -38,7 +38,8 @@
                   android:singleLine="true"
                   android:layout_margin="10dp"
                   android:inputType="phone"
-                  android:hint="Telefon Numaranız"/>
+                  android:maxLength="10"
+                  android:hint="Telefon Numaranız (5xxxxxxxxx)"/>
 
     </LinearLayout>
 

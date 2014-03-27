@@ -5,14 +5,11 @@
                 android:layout_height="match_parent">
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:layout_above="@+id/llRegisterFooter"
                   android:orientation="vertical">
 
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:id="@+id/etRegisterUserSex"
-                  android:singleLine="true"
-                  android:layout_margin="10dp"
-                  android:hint="Cinsiyetiniz (Kadın/Erkek)"/>
+        <Spinner android:layout_width="match_parent" android:layout_height="wrap_content"
+                 android:id="@+id/sRegisterUserSex"
+                 android:layout_margin="10dp"/>
 
         <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:id="@+id/etRegisterUserHeight"

@@ -18,13 +18,13 @@ import java.util.Date;
 /**
  * Created by kanilturgut on 19/03/14.
  */
-public class MyViewPagerAdapter extends FragmentPagerAdapter {
+public class RegisterViewPagerAdapter extends FragmentPagerAdapter {
 
     static Context context = null;
     public static final String ARG_PAGE = "page";
     public static View view = null;
 
-    public MyViewPagerAdapter(android.support.v4.app.FragmentManager fm, Context c) {
+    public RegisterViewPagerAdapter(android.support.v4.app.FragmentManager fm, Context c) {
         super(fm);
 
         context = c;
@@ -169,10 +169,29 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
 
     static void thirdScreen() {
 
-        final EditText gender, height, weight;
+        final EditText height, weight;
+        final Spinner gender;
         Button bGeri, bIleri;
 
-        gender = (EditText) view.findViewById(R.id.etRegisterUserSex);
+        String[] sex = {"Cinsiyetiniz", "Erkek", "Kadın"};
+
+        gender = (Spinner) view.findViewById(R.id.sRegisterUserSex);
+        gender.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, sex));
+        gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0)
+                    RegisterActivity.user.setSex(i-1);
+                else
+                    RegisterActivity.user.setSex(0);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                RegisterActivity.user.setSex(0);
+            }
+        });
+
         height = (EditText) view.findViewById(R.id.etRegisterUserHeight);
         weight = (EditText) view.findViewById(R.id.etRegisterUserWeight);
 
@@ -181,11 +200,7 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
             @Override
             public void onClick(View view) {
 
-                if (!isEmpty(gender.getText().toString(), height.getText().toString(), weight.getText().toString())) {
-                    if (gender.getText().toString().toLowerCase().trim().contains("er"))
-                        RegisterActivity.user.setSex(0);
-                    else
-                        RegisterActivity.user.setSex(1);
+                if (!isEmpty(height.getText().toString(), weight.getText().toString())) {
 
                     String kilo = weight.getText().toString().trim();
                     if (kilo.contains("."))
@@ -202,6 +217,8 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
                     RegisterActivity.user.setBmi(bmi);
 
                     RegisterActivity.goNextPage(3);
+                } else {
+                    Toast.makeText(context, "Bütün alanları doldurunuz", Toast.LENGTH_LONG).show();
                 }
 
             }

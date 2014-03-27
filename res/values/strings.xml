@@ -8,4 +8,9 @@
     <string name="action_settings">Settings</string>
 
     <string name="unable_to_connect_device">Unable to connect device"</string>
+
+
+    <!-- Pubnub -->
+    <string name="pubnup_publish_key">pub-c-13b31cee-ef79-440f-b46d-e3804f3d5435</string>
+    <string name="pubnup_subscribe_key">sub-c-3a5a7350-b28d-11e3-b8c3-02ee2ddab7fe</string>
 </resources>

@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     com.pubnub.api.Callback callback;
     JSONArray jsonArray = new JSONArray();
     EditText xx;
-    int sayi = 20;
+    int sayi = 24;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         getActionBar().hide();
 
-        pubnub = new Pubnub("pub-c-13b31cee-ef79-440f-b46d-e3804f3d5435", "sub-c-3a5a7350-b28d-11e3-b8c3-02ee2ddab7fe");
+        pubnub = new Pubnub(getString(R.string.pubnup_publish_key), getString(R.string.pubnup_subscribe_key));
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -268,7 +268,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     new ECGDataTask(MainActivity.this, ecgDatas).execute();
                                     ecgDatas = new ArrayList<ECGData>();
                                 }
-
 
                                 ecgDatas = new ArrayList<ECGData>();
                             }

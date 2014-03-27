@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import com.tobbetu.MobileECG.R;
-import com.tobbetu.MobileECG.adapter.MyViewPagerAdapter;
+import com.tobbetu.MobileECG.adapter.RegisterViewPagerAdapter;
 import com.tobbetu.MobileECG.models.User;
 
 /**
@@ -17,7 +17,7 @@ public class RegisterActivity extends FragmentActivity {
 
     final String TAG = "RegisterActivity";
     static ViewPager viewPager;
-    MyViewPagerAdapter myViewPagerAdapter;
+    RegisterViewPagerAdapter registerViewPagerAdapter;
 
     public static User user;
 
@@ -29,10 +29,10 @@ public class RegisterActivity extends FragmentActivity {
         user.setDeviceID(getIntent().getStringExtra("regid"));
 
         viewPager = (ViewPager) findViewById(R.id.vpRegisterPager);
-        myViewPagerAdapter = new com.tobbetu.MobileECG.adapter.MyViewPagerAdapter(getSupportFragmentManager(), RegisterActivity.this);
+        registerViewPagerAdapter = new RegisterViewPagerAdapter(getSupportFragmentManager(), RegisterActivity.this);
 
         if (viewPager != null)
-            viewPager.setAdapter(myViewPagerAdapter);
+            viewPager.setAdapter(registerViewPagerAdapter);
 
     }
 
