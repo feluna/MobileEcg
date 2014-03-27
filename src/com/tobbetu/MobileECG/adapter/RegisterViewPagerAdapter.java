@@ -12,6 +12,7 @@ import com.tobbetu.MobileECG.R;
 import com.tobbetu.MobileECG.activities.RegisterActivity;
 import com.tobbetu.MobileECG.service.Register;
 import com.tobbetu.MobileECG.tasks.RegisterTask;
+import com.tobbetu.MobileECG.util.Util;
 
 import java.util.Date;
 
@@ -103,7 +104,6 @@ public class RegisterViewPagerAdapter extends FragmentPagerAdapter {
 
     static void firstScreen() {
 
-
         final EditText etAdi = (EditText) view.findViewById(R.id.etRegisterUserName);
         final EditText etSoyadi = (EditText) view.findViewById(R.id.etRegisterUserSurname);
         final EditText etDogumTarihi = (EditText) view.findViewById(R.id.etRegisterBirthday);
@@ -124,11 +124,13 @@ public class RegisterViewPagerAdapter extends FragmentPagerAdapter {
                 if (!isEmpty(adi, soyadi, dogumtarihi, adres, tel)) {
                     RegisterActivity.user.setName(adi.trim());
                     RegisterActivity.user.setSurname(soyadi.trim());
-                    RegisterActivity.user.setBirthday(new Date());
+                    RegisterActivity.user.setBirthday(Util.stringToDate(dogumtarihi));
                     RegisterActivity.user.setAddress(adres.trim());
                     RegisterActivity.user.setPhoneNumber(tel.trim());
 
                     RegisterActivity.goNextPage(1);
+                } else {
+                    Toast.makeText(context, "Bütün alanları doldurunuz", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -153,6 +155,8 @@ public class RegisterViewPagerAdapter extends FragmentPagerAdapter {
                     RegisterActivity.user.setPassword(etPassword.getText().toString().trim());
 
                     RegisterActivity.goNextPage(2);
+                } else {
+                    Toast.makeText(context, "Bütün alanları doldurunuz", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -181,7 +185,7 @@ public class RegisterViewPagerAdapter extends FragmentPagerAdapter {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0)
-                    RegisterActivity.user.setSex(i-1);
+                    RegisterActivity.user.setSex(i - 1);
                 else
                     RegisterActivity.user.setSex(0);
             }
@@ -331,10 +335,7 @@ public class RegisterViewPagerAdapter extends FragmentPagerAdapter {
 
 
                 new RegisterTask(context).execute(RegisterActivity.user);
-
-
             }
         });
-
     }
 }
