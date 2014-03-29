@@ -17,6 +17,7 @@ import com.shimmerresearch.driver.FormatCluster;
 import com.shimmerresearch.driver.ObjectCluster;
 import com.shimmerresearch.graph.GraphView;
 import com.tobbetu.MobileECG.R;
+import com.tobbetu.MobileECG.android_service.MobileECGService;
 import com.tobbetu.MobileECG.models.ECGData;
 import com.tobbetu.MobileECG.tasks.ECGDataTask;
 import org.json.JSONArray;
@@ -171,8 +172,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         String units = "u12";
 
                         ECGData ecgData = new ECGData();
-                        ecgData.setLatitude(0);
-                        ecgData.setLongitude(0);
+                        ecgData.setLatitude(MobileECGService.getLocation().getLatitude());
+                        ecgData.setLongitude(MobileECGService.getLocation().getLongitude());
+                        ecgData.setUserState(spinnerActivityLabel.getSelectedItemPosition() - 1);
 
                         if (objectCluster.mMyName.equals("Device")) {
 
@@ -186,7 +188,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     dataArray[0] = (int) ObjectCluster.returnFormatCluster(ecg_ra_ll, "RAW").mData;
                                     ecgData.setRAW_ra_ll(dataArray[0]);
                                     ecgData.setRa_ll(formatCluster.mData);
-                                    ecgData.setUserState(spinnerActivityLabel.getSelectedItemPosition() - 1);
                                 }
                             }
 
@@ -200,7 +201,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                     dataArray[1] = (int) ObjectCluster.returnFormatCluster(ecg_la_ll, "RAW").mData;
                                     ecgData.setRAW_la_ll(dataArray[1]);
                                     ecgData.setLa_ll(formatCluster.mData);
-                                    ecgData.setUserState(spinnerActivityLabel.getSelectedItemPosition() - 1);
                                 }
                             }
 
@@ -361,6 +361,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void disconnect() {
         disableAndEnableButtons(bDisconnectFromShimmer, bConnectToShimmer);
+        stopService(new Intent(context, MobileECGService.class));
         try {
             stopStreaming();
         } catch (Exception e) {

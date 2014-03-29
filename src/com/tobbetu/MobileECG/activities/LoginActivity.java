@@ -3,6 +3,7 @@ package com.tobbetu.MobileECG.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tobbetu.MobileECG.R;
+import com.tobbetu.MobileECG.android_service.MobileECGService;
 import com.tobbetu.MobileECG.tasks.LoginTask;
 
 import java.io.IOException;
@@ -48,6 +50,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Location loc = MobileECGService.getLocation();
 
         // Check device for Play Services APK. If check succeeds, proceed with
         //  GCM registration.

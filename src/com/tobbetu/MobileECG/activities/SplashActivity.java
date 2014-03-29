@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import com.tobbetu.MobileECG.R;
+import com.tobbetu.MobileECG.android_service.MobileECGService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +17,8 @@ public class SplashActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        startService(new Intent(this, MobileECGService.class));
 
         new Handler().postDelayed(new Runnable() {
             @Override
