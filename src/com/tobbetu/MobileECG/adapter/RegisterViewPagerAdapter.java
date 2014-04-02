@@ -242,8 +242,8 @@ public class RegisterViewPagerAdapter extends FragmentPagerAdapter {
     static void fourthScreen() {
 
         String[] activityFrequency = {"Aktivite Yapma Sıklığınız", "Yapmıyorum", "Fırsat Buldukça", "Düzenli"};
-        String[] smokingFrequecny = {"Sigara İçme Sıklığınız", "Hiç", "Çok İçiyorum", "Arada Sırada", "İçmiyorum"};
-        String[] alcoholFrequecny = {"Alkol Kullanma Sıklığınız", "Çok İçiyorum", "Arada Sırada", "İçmiyorum"};
+        String[] smokingFrequecny = {"Sigara İçme Sıklığınız", "İçmiyorum", "Çok İçiyorum", "Arada Sırada", "Bıraktım"};
+        String[] alcoholFrequecny = {"Alkol Kullanma Sıklığınız", "İçmiyorum", "Çok İçiyorum", "Arada Sırada", "Bıraktım"};
 
         Spinner activity, smoking, alcohol;
 
