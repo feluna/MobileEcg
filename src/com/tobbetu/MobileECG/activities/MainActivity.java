@@ -242,12 +242,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
                                 //to the server
-                                if (ecgDatas.size() == 800) {
+                                if (ecgDatas.size() == 1000) {
                                     new ECGDataTask(context, ecgDatas).execute();
                                     ecgDatas = new ArrayList<ECGData>();
                                 }
-
-                                ecgDatas = new ArrayList<ECGData>();
                             }
                         }
                     }
