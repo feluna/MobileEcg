@@ -27,8 +27,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class Requests {
 
-    public static final String domain = "http://10.10.29.30:8080";
-    //public static final String domain = "http://10.10.235.167:8080";
+    //public static final String domain = "http://10.10.29.30:8080";
+    public static final String domain = "http://10.10.235.167:8080";
     private static Requests instance = null;
     private HttpClient httpclient;
 

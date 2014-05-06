@@ -34,7 +34,7 @@ public class ECGDataTask extends AsyncTask<List<ECGData>, Void, Boolean>{
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(context, "Please Wait", "Your data is sending", true, false);
+       // progressDialog = ProgressDialog.show(context, "Please Wait", "Your data is sending", true, false);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ECGDataTask extends AsyncTask<List<ECGData>, Void, Boolean>{
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
-        progressDialog.dismiss();
+        //progressDialog.dismiss();
         if (aBoolean)
             Log.i("basarili", "tamamdir yolladimm panpi");
         else

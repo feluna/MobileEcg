@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import com.tobbetu.MobileECG.activities.LoginActivity;
 import com.tobbetu.MobileECG.activities.MainActivity;
 import com.tobbetu.MobileECG.activities.RegisterActivity;
 import com.tobbetu.MobileECG.models.User;
@@ -55,7 +56,7 @@ public class RegisterTask extends AsyncTask<User, Void, Boolean>{
         progressDialog.dismiss();
 
         if (result)
-            context.startActivity(new Intent(context, MainActivity.class));
+            context.startActivity(new Intent(context, LoginActivity.class));
         else
             Toast.makeText(context, "Register FAILED", Toast.LENGTH_LONG).show();
     }

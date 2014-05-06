@@ -80,6 +80,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         //set listeners
         tvRegister.setOnClickListener(this);
         bDoLogin.setOnClickListener(this);
+
+        //etUsername.setText("patient");
+        //etPassword.setText("pass");
     }
 
     @Override
@@ -104,7 +107,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 } else {
                     new LoginTask(LoginActivity.this).execute(userName, password);
                 } */
-                new LoginTask(LoginActivity.this).execute("patient", "pass", regid);
+                //new LoginTask(LoginActivity.this).execute("patient", "pass", regid);
+                new LoginTask(LoginActivity.this).execute(userName, password, regid);
 
                 break;
             case R.id.tvRegister:
